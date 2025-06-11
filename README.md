@@ -8,6 +8,7 @@
 
 # 🙋‍♀️ 프로젝트 소개
 > **Readio – 스마트한 전자책 구독 플랫폼**
+- 전자책 서비스를 코틀린으로 마이그레이션 하여 생산성을 높였습니다.
 - 언제 어디서나 웹으로 책을 읽을 수 있는 온라인 전자책 구독 서비스입니다.
 - 전자책 데이터는 네이버 클라우드에 안정적으로 저장되며, Elasticsearch를 통해 빠르고 정확한 검색 환경을 제공합니다.
 - 사용자는 토스페이 결제를 통해 포인트를 충전하고, 충전된 포인트로 구독권을 구매할 수 있습니다.
@@ -29,10 +30,6 @@
       <a href="https://github.com/kimsj0970"><b>김승중</b></a>
     </td>
     <td align="center">
-      <a href="https://github.com/hyunwestpark"><img src="https://avatars.githubusercontent.com/u/123967536?v=4" width="150px"/></a><br/>
-      <a href="https://github.com/hyunwestpark"><b>박현서</b></a>
-    </td>
-    <td align="center">
       <a href="https://github.com/chw0912"><img src="https://avatars.githubusercontent.com/u/95081400?v=4" width="150px"/></a><br/>
       <a href="https://github.com/chw0912"><b>최희웅</b></a>
     </td>
@@ -44,7 +41,6 @@
   <tr>
     <td align="center">Backend</td>
     <td align="center">Backend</td>
-    <td align="center">FE&Backend</td>
     <td align="center">Backend</td>
     <td align="center">Backend</td>
   </tr>

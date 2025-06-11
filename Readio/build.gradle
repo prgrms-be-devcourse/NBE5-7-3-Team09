@@ -2,6 +2,10 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.1'
     id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.jetbrains.kotlin.jvm' version '2.1.21'
+    id 'org.jetbrains.kotlin.plugin.spring' version '2.1.21'
+    id 'org.jetbrains.kotlin.plugin.jpa' version '2.1.21'
+    id 'org.jetbrains.kotlin.plugin.allopen' version "2.1.21"
 }
 
 dependencyManagement {
@@ -19,6 +23,20 @@ java {
     }
 }
 
+// Kotlin 컴파일러 옵션 설정
+kotlin {
+    compilerOptions {
+        freeCompilerArgs = ["-Xjsr305=strict"]
+    }
+}
+
+// JPA Entity들을 자동으로 open class로 만들어주는 설정
+allOpen {
+    annotation("jakarta.persistence.Entity")
+    annotation("jakarta.persistence.MappedSuperclass")
+    annotation("jakarta.persistence.Embeddable")
+}
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
@@ -30,37 +48,59 @@ repositories {
 }
 
 dependencies {
+    // Spring Boot Starters
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'com.mysql:mysql-connector-j'
 
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // Spring Cloud
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
-    testCompileOnly 'org.projectlombok:lombok'
-    testAnnotationProcessor 'org.projectlombok:lombok'
+    // Kotlin 핵심 의존성
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    implementation "org.jetbrains.kotlin:kotlin-reflect"
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin"
 
+    // 코루틴 지원
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-reactor"
 
+    // Kotlin 로깅
+    implementation "io.github.oshai:kotlin-logging-jvm:7.0.7"
+
+    // JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
 
-
-    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
-
+    // AWS SDK
     implementation 'software.amazon.awssdk:s3:2.20.130'
     implementation 'software.amazon.awssdk:auth:2.20.130'
 
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    // Database
+    runtimeOnly 'com.mysql:mysql-connector-j'
 
-    implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
+    // Lombok (Kotlin 변환 완료 후 제거 예정)
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 
-    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    // Test Dependencies
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test"
+    testImplementation "io.mockk:mockk:1.14.2"
+    testImplementation "io.kotest:kotest-assertions-core-jvm:5.9.1"
+    testImplementation "io.kotest:kotest-runner-junit5-jvm:5.9.1"
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit5"
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // Test Lombok (Kotlin 변환 완료 후 제거 예정)
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
 tasks.named('test') {

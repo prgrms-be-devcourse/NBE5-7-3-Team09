@@ -58,4 +58,8 @@ public class User {
 		this.point = point;
 	}
 
+	public long getPoint() {
+		return this.point;
+	}
+
 }

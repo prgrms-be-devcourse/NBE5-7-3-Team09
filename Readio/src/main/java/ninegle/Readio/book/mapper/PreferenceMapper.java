@@ -55,12 +55,13 @@ public class PreferenceMapper {
 			.pagination(paginationDto)
 			.build();
 	}
+
 	public PaginationDto toPaginationDto(Long count,int page,int size){
-		return PaginationDto.builder()
-			.totalPages((count.intValue()/size)+1)
-			.size(size)
-			.currentPage(page)
-			.totalElements(count)
-			.build();
+		return new PaginationDto(
+				count,
+				(count.intValue()/size)+1,
+				page,
+				size
+		);
 	}
 }

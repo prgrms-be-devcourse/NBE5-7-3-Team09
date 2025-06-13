@@ -58,6 +58,19 @@ public class User {
 		this.point = point;
 	}
 
+	//마이그레이션을 위해 임시로 추가해둠
+	public String getEmail() {
+		return this.email;
+	}
+
+	public String getNickname() {
+		return this.nickname;
+	}
+
+	public String getPhoneNumber() {
+		return this.phoneNumber;
+	}
+
 	public long getPoint() {
 		return this.point;
 	}

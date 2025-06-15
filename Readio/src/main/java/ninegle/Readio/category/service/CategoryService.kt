@@ -18,13 +18,11 @@ class CategoryService(
         val grouped = categories.groupBy { it.major }
 
         val result = grouped.map { (major, groupCategories) ->
-            val id = groupCategories.first().id
-            val subs = groupCategories.map { it.sub }
             CategoryGroupDto(
-                id = id,
+                id = groupCategories.first().id,
                 major = major,
-                subs = subs.toMutableList())
-        }.toMutableList()
+                subs = groupCategories.map { it.sub }.toMutableList()
+            )}.toMutableList()
 
         return CategoryGroupResponseDto(result)
     }

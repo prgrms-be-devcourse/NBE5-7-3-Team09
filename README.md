@@ -29,10 +29,6 @@
       <a href="https://github.com/kimsj0970"><b>김승중</b></a>
     </td>
     <td align="center">
-      <a href="https://github.com/hyunwestpark"><img src="https://avatars.githubusercontent.com/u/123967536?v=4" width="150px"/></a><br/>
-      <a href="https://github.com/hyunwestpark"><b>박현서</b></a>
-    </td>
-    <td align="center">
       <a href="https://github.com/chw0912"><img src="https://avatars.githubusercontent.com/u/95081400?v=4" width="150px"/></a><br/>
       <a href="https://github.com/chw0912"><b>최희웅</b></a>
     </td>

@@ -15,8 +15,6 @@ class RefreshToken (
     @field:JoinColumn(name = "user_id") @field:ManyToOne(fetch = FetchType.LAZY)
     var user: User) {
 
-    constructor() : this("", User()) // 기본 생성자 (JPA용) }
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

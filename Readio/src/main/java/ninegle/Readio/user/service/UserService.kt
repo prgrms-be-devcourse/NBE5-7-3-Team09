@@ -227,12 +227,13 @@ open class UserService(
             throw BusinessException(ErrorCode.LOGIN_USER_NOT_FOUND) //404
         }
 
-        // 라이브러리에 책, 라이브러리들 삭제
+        // 라이브러리에 책들 삭제
         val libraries = libraryRepository.findAllByUserId(userId)
         for (library in libraries) {
             val libraryBooks = libraryBookRepository.findByLibraryId(library.id)
             libraryBookRepository.deleteAll(libraryBooks)
         }
+        // 라이브러리 삭제
         libraryRepository.deleteAll(libraries)
 
         //관심도서 삭제

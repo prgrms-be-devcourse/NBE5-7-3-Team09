@@ -13,9 +13,6 @@ class BlackList(
     @field:Column(nullable = false)
     var expiration: Date) {
 
-    constructor() : this("", Date()) {
-
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

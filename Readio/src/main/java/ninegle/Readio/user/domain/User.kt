@@ -18,9 +18,6 @@ class User (
 
      var point: Long = 15000L ){
 
-    // JPA가 사용할 기본 생성자 (필수)
-    constructor() : this("", "", "", "", 15000L)
-
 
     @Id
     @Column(name = "user_id")

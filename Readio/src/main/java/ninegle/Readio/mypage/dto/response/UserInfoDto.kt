@@ -5,7 +5,7 @@ package ninegle.Readio.mypage.dto.response
  */
 data class UserInfoDto(
 	val email: String,
-	val nickname: String,
-	val phoneNumber: String,
+	val nickname: String?,
+	val phoneNumber: String?,
 	val point: Long
 )

@@ -40,7 +40,6 @@
   <tr>
     <td align="center">Backend</td>
     <td align="center">Backend</td>
-    <td align="center">FE&Backend</td>
     <td align="center">Backend</td>
     <td align="center">Backend</td>
   </tr>

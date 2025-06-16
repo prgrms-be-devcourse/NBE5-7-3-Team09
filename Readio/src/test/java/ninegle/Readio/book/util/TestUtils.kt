@@ -3,6 +3,7 @@ package ninegle.Readio.book.util
 import ninegle.Readio.book.domain.Author
 import ninegle.Readio.book.domain.Book
 import ninegle.Readio.book.domain.BookSearch
+import ninegle.Readio.book.domain.Review
 import ninegle.Readio.book.dto.BookRequestDto
 import ninegle.Readio.book.dto.BookResponseDto
 import ninegle.Readio.book.dto.PaginationDto
@@ -15,8 +16,10 @@ import ninegle.Readio.book.mapper.toPublisherDto
 import ninegle.Readio.book.mapper.toSearchResponseDto
 import ninegle.Readio.category.domain.Category
 import ninegle.Readio.publisher.domain.Publisher
+import ninegle.Readio.user.domain.User
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.web.multipart.MultipartFile
+import java.math.BigDecimal
 import java.time.LocalDate
 
 
@@ -123,3 +126,22 @@ fun genPaginationDto(count: Long, page: Int, size: Int) = PaginationDto(
 
 fun genMockMultipartFile(name: String, originalFilename: String, contentType: String, content: ByteArray) =
     MockMultipartFile(name, originalFilename, contentType, content)
+
+// Review
+fun genReview(rating: BigDecimal, text : String, user : User, book : Book) = Review(
+    rating = rating,
+    text = text,
+    user = user,
+    book = book
+)
+//User
+fun genUser(
+    email: String ,
+    password: String ,
+    nickname: String ,
+    phoneNumber: String
+): User {
+    return User(email, password, nickname, phoneNumber)
+}
+
+

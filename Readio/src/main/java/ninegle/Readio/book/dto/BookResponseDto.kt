@@ -7,7 +7,6 @@ import ninegle.Readio.publisher.dto.PublisherDto
 import java.time.LocalDate
 
 @Builder
-@JvmRecord
 data class BookResponseDto(
     val id: Long,
     val name: String,

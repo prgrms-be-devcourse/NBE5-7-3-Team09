@@ -34,5 +34,4 @@ data class BookRequestDto(
     @field: NotNull(message = "EPUB 파일은 필수입니다.")
     val epubFile: MultipartFile
 
-) {
-}
+)

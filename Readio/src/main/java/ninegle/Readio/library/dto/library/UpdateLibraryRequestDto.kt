@@ -5,4 +5,4 @@ import jakarta.validation.constraints.NotBlank
 
 data class UpdateLibraryRequestDto(
     @NotBlank(message = "라이브러리 이름은 필수 입력값입니다.")
-    val libraryName: String= "")
+    val libraryName: String)

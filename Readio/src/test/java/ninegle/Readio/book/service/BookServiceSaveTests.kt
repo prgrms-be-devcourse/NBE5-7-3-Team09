@@ -60,14 +60,14 @@ class BookServiceSaveTests {
     fun setUp() {
         mockEpubFile =
             genMockMultipartFile(
-                name = "EpubFile",
+                name = "epubFile",
                 originalFilename = "test.epub",
                 contentType = "application/epub+zip",
                 content = "test".toByteArray()
             )
 
         mockImageFile = genMockMultipartFile(
-            name = "ImageFile",
+            name = "image",
             originalFilename = "test.jpg",
             contentType = "image/jpeg",
             content = "test".toByteArray()

@@ -91,7 +91,7 @@ public class LibraryBookService {
 		}
 		Library library = libraryOptional.get();
 		Long currentUserId = userContextService.getCurrentUserId();
-		if (!library.getUser().getId().equals(currentUserId)) {
+		if (library.getUser().getId() != (currentUserId)) {
 			throw new BusinessException(ErrorCode.FORBIDDEN_ACCESS); // 403: 권한 없음
 		}
 		return libraryOptional.get();

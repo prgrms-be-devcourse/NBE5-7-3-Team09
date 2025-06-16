@@ -1,7 +1,6 @@
 package ninegle.Readio.user.service;
 
 import java.util.Date;
-import java.util.Optional;
 
 import javax.crypto.SecretKey;
 
@@ -20,7 +19,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ninegle.Readio.user.config.JwtConfiguration;
-import ninegle.Readio.user.domain.RefreshToken;
 import ninegle.Readio.user.domain.Role;
 import ninegle.Readio.user.dto.TokenBody;
 import ninegle.Readio.user.repository.TokenRepository;
@@ -51,11 +49,11 @@ public class JwtTokenProvider {
 		return issueToken(id, role, jwtConfiguration.getExpTime().getRefresh(), email);
 	}
 
-	//멤버가 가진 RefreshToken 가져오기
-	public Optional<RefreshToken> findRefreshToken(Long adminId) {
-		return tokenRepository.findTop1ByUserIdOrderByIdDesc(adminId);
-
-	}
+	// //멤버가 가진 RefreshToken 가져오기
+	// public Optional<RefreshToken> findRefreshToken(Long adminId) {
+	// 	return tokenRepository.findTop1ByUserIdOrderByIdDesc(adminId);
+	//
+	// }
 
 	//access & refresh 토큰 생성
 	private String issueToken(Long id, Role role, Long expTime, String email) {

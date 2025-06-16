@@ -28,10 +28,6 @@ class ViewerControllerTests {
     @MockBean
     lateinit var service: BookService
 
-    @Autowired
-    lateinit var om: ObjectMapper
-
-
     @Test
     @WithMockUser(roles = ["USER"])
     fun `도서 뷰어 요청이 성공적으로 수행되었을 때`() {

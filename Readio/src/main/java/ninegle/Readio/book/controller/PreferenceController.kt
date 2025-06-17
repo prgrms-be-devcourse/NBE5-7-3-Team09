@@ -21,7 +21,7 @@ class PreferenceController(
     val preferenceService: PreferenceService
 ) {
     @PostMapping
-    fun save(@RequestBody dto: @Valid BookIdRequestDto): ResponseEntity<BaseResponse<PreferenceResponseDto>> {
+    fun save(@RequestBody @Valid dto: BookIdRequestDto): ResponseEntity<BaseResponse<PreferenceResponseDto>> {
         val userId = userContextService.currentUserId
 
         val saved = preferenceService.save(userId!!, dto)

@@ -132,6 +132,7 @@ open class UserService(
 
         //요청을 한 사람이 기존에 회원가입이 되어 있는 사용자가 맞는지 검사
         val userId = jwtTokenProvider.parseJwt(refreshToken).userId
+            ?: throw BusinessException(ErrorCode.INVALID_REFRESH_TOKEN)
         val user : User
         if (userRepository.findById(userId).isPresent) {
             //관리자 정보가 있다면 user 객체로 가져옴
@@ -176,7 +177,7 @@ open class UserService(
             throw BusinessException(ErrorCode.INVALID_ACCESS_TOKEN) //401
         }
 
-        val userId: Long = jwtTokenProvider.parseJwt(accessToken).userId
+        val userId: Long = jwtTokenProvider.parseJwt(accessToken).userId ?: throw BusinessException(ErrorCode.INVALID_ACCESS_TOKEN)
 
         val findrefreshToken = tokenRepository.findTop1ByUserIdOrderByIdDesc(userId) ?: throw BusinessException(ErrorCode.INVALID_ACCESS_TOKEN) // 401 반환
 
@@ -186,9 +187,7 @@ open class UserService(
         }
 
         //토큰이 유효하다면, 이 토큰의 만료 시각을 가져온다. 블랙리스트에도 해당 만료 시간을 똑같이 넣어서 15분이면 15분 동안은 이 토큰을 사용하기 위해
-        val expiration = jwtTokenProvider.getExpiration(
-            accessToken
-        ) //만료 시간 추출해서 현재 시간이 만료가 예정된 시간보다 작으면 그 토큰을 사용하지 못하게
+        val expiration = jwtTokenProvider.getExpiration(accessToken) //만료 시간 추출해서 현재 시간이 만료가 예정된 시간보다 작으면 그 토큰을 사용하지 못하게
         blackListRepository.save(BlackList(accessToken, expiration))
         tokenRepository.delete(findrefreshToken)
     }
@@ -204,7 +203,7 @@ open class UserService(
         val delete = toDelete(deleteUserRequestDto)
 
         // 1. 토큰에서 유저 정보 추출
-        val userId: Long = jwtTokenProvider.parseJwt(accessToken).userId
+        val userId: Long = jwtTokenProvider.parseJwt(accessToken).userId ?: throw BusinessException(ErrorCode.INVALID_ACCESS_TOKEN)
 
         // 2. DB에서 유저 조회
         val tokenUser = userRepository.findById(userId)

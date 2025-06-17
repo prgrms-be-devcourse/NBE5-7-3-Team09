@@ -54,9 +54,9 @@ class JwtAuthFilter(//토큰 제공자
         if (token != null && jwtTokenProvider.validate(token)) {
             // 토큰에서 사용자 정보를 추출
 
-            val tokenBody = jwtTokenProvider.parseJwt(token)
-            val userEntity = userRepository.findById(tokenBody.userId) ?: throw BusinessException(ErrorCode.USER_NOT_FOUND) //404
-
+            val tokenBody = jwtTokenProvider.parseJwt(token)?: throw BusinessException(ErrorCode.INVALID_ACCESS_TOKEN)
+            val userId = tokenBody.userId ?: throw BusinessException(ErrorCode.INVALID_ACCESS_TOKEN)
+            val userEntity = userRepository.findById(userId)
 
 //            //사용자가 입력한 ID/PW를 UsernamePasswordAuthenticationToken으로 감쌈
 //            val usernamePasswordAuthenticationToken: Authentication = UsernamePasswordAuthenticationToken(

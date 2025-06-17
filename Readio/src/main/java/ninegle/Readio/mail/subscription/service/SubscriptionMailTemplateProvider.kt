@@ -1,23 +1,21 @@
-package ninegle.Readio.mail.subscription.service;
+package ninegle.Readio.mail.subscription.service
+import java.time.format.DateTimeFormatter
+import org.springframework.stereotype.Service
+import org.springframework.util.StringUtils
+import ninegle.Readio.global.util.StringUtil
+import ninegle.Readio.subscription.domain.Subscription
 
-import java.time.format.DateTimeFormatter;
-
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
-import ninegle.Readio.global.util.StringUtil;
-import ninegle.Readio.subscription.domain.Subscription;
 
 @Service
-public class SubscriptionMailTemplateProvider {
+class SubscriptionMailTemplateProvider {
 
-	private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
-	// 구독 결제 완료 템플릿
-	public String buildSubscribeMailBody(String nickname, Subscription subscription) {
-		String reNickname = StringUtils.hasText(nickname) ? nickname : "회원";
+    // 구독 결제 완료 템플릿
+    fun buildSubscribeMailBody(nickname: String, subscription: Subscription): String {
+        val reNickname = if (StringUtils.hasText(nickname)) nickname else "회원"
 
-		return StringUtil.format("""
+        return StringUtil.format("""
                 안녕하세요, {}님.
                 Readio의 세계에 오신 것을 진심으로 환영합니다!
 
@@ -43,18 +41,18 @@ public class SubscriptionMailTemplateProvider {
                 전화번호: 02-123-456 | 전자책서비스를 여러분에게 제공합니다.
                 Copyright © 2025 by Readio, Inc. All rights reserved.
                 """,
-			reNickname,
-			reNickname,
-			subscription.getSubDate().format(formatter),
-			subscription.getExpDate().format(formatter)
-		);
-	}
+            reNickname,
+            reNickname,
+            subscription.subDate.format(formatter),
+            subscription.expDate.format(formatter)
+        )
+    }
 
-	// 구독 취소 템플릿
-	public String buildCancelMailBody(String nickname, Subscription subscription) {
-		String reNickname = StringUtils.hasText(nickname) ? nickname : "회원";
+    // 구독 취소 템플릿
+    fun buildCancelMailBody(nickname: String, subscription: Subscription): String {
+        val reNickname = if (StringUtils.hasText(nickname)) nickname else "회원"
 
-		return StringUtil.format("""
+        return StringUtil.format("""
                 안녕하세요, {}님.
                 Readio를 이용해 주셔서 진심으로 감사드립니다.
 
@@ -78,17 +76,17 @@ public class SubscriptionMailTemplateProvider {
                 전화번호: 02-123-456 | 전자책서비스를 여러분에게 제공합니다.
                 Copyright © 2025 by Readio, Inc. All rights reserved.
                 """,
-			reNickname,
-			reNickname,
-			subscription.getExpDate().format(formatter)
-		);
-	}
+            reNickname,
+            reNickname,
+            subscription.expDate.format(formatter)
+        )
+    }
 
-	// 구독 만료하루전 알림
-	public String buildExpirationSoonMailBody(String nickname, Subscription subscription) {
-		String reNickname = StringUtils.hasText(nickname) ? nickname : "회원";
+    // 구독 만료하루전 알림
+    fun buildExpirationSoonMailBody(nickname: String, subscription: Subscription): String {
+        val reNickname = if (StringUtils.hasText(nickname)) nickname else "회원"
 
-		return StringUtil.format("""
+        return StringUtil.format("""
                 안녕하세요, {}님.
                 Readio의 여정은 즐거우셨나요?
                 
@@ -112,17 +110,17 @@ public class SubscriptionMailTemplateProvider {
                 전화번호: 02-123-456 | 전자책서비스를 여러분에게 제공합니다.
                 Copyright © 2025 by Readio, Inc. All rights reserved.
                 """,
-			reNickname,
-			subscription.getExpDate(),
-			subscription.getExpDate()
-		);
-	}
+            reNickname,
+            subscription.expDate,
+            subscription.expDate
+        )
+    }
 
-	// 구독 만료일 알림
-	public String buildExpirationTodayMailBody(String nickname, Subscription subscription) {
-		String reNickname = StringUtils.hasText(nickname) ? nickname : "회원";
+    // 구독 만료일 알림
+    fun buildExpirationTodayMailBody(nickname: String, subscription: Subscription): String {
+        val reNickname = if (StringUtils.hasText(nickname)) nickname else "회원"
 
-		return StringUtil.format("""
+        return StringUtil.format("""
                 안녕하세요, {}님.
                 Readio와 함께한 시간은 즐거우셨나요?
                 
@@ -145,9 +143,9 @@ public class SubscriptionMailTemplateProvider {
                 전화번호: 02-123-456 | 전자책서비스를 여러분에게 제공합니다.
                 Copyright © 2025 by Readio, Inc. All rights reserved.
                 """,
-			reNickname,
-			subscription.getExpDate(),
-			subscription.getExpDate()
-		);
-	}
+            reNickname,
+            subscription.expDate,
+            subscription.expDate
+        )
+    }
 }

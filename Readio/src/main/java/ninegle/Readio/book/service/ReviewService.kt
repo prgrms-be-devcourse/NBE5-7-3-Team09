@@ -52,7 +52,7 @@ class ReviewService(
     // Review Create
     @Transactional
     fun save(userId: Long?, reviewRequestDto: ReviewRequestDto, book_id: Long) {
-        val user = userService.getById(userId)
+        val user = userService.getById(userId!!)
         val book = bookService.getBookById(book_id)
         reviewRepository.save(reviewMapper.toEntity(reviewRequestDto, user, book))
 
@@ -82,21 +82,21 @@ class ReviewService(
         updateRatingInBookSearch(review.book.id!!)
     }
 //  매퍼 문제 해결후 주석 해제
-//    fun getReviewList(bookId: Long, page: Int, size: Int): ReviewListResponseDto {
-//        val book = bookService.getBookById(bookId)
-//        val pageable: Pageable = PageRequest.of(page - 1, size)
-//        val count = reviewRepository.countByBook(book)
-//        val average = reviewRepository.findAverageRatingByBook(book.id!!)
-//
-//        val reviews = reviewRepository.findReviewsByBook(book, pageable)!!.content
-//        val reviewList = reviewMapper.toResponseDto(reviews)
-//
-//        val paginationDto = reviewMapper.toPaginationDto(count, page, size)
-//        val summaryDto = reviewMapper.toSummaryDto(count, average!!)
-//
-//        return reviewMapper.toReviewListResponseDto(
-//            reviewList, paginationDto,
-//            summaryDto
-//        )
-//    }
+    fun getReviewList(bookId: Long, page: Int, size: Int): ReviewListResponseDto {
+        val book = bookService.getBookById(bookId)
+        val pageable: Pageable = PageRequest.of(page - 1, size)
+        val count = reviewRepository.countByBook(book)
+        val average = reviewRepository.findAverageRatingByBook(book.id!!)
+
+        val reviews = reviewRepository.findReviewsByBook(book, pageable)!!.content
+        val reviewList = reviewMapper.toResponseDto(reviews)
+
+        val paginationDto = reviewMapper.toPaginationDto(count, page, size)
+        val summaryDto = reviewMapper.toSummaryDto(count, average!!)
+
+        return reviewMapper.toReviewListResponseDto(
+            reviewList, paginationDto,
+            summaryDto
+        )
+    }
 }

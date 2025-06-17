@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ninegle.Readio.mail.common.service.EmailService;
+import ninegle.Readio.user.domain.User;
 
 @Slf4j
 @Service

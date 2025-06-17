@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import ninegle.Readio.user.domain.User;
 import ninegle.Readio.user.repository.UserRepository;
 import ninegle.Readio.user.service.UserContextService;
 import ninegle.Readio.global.exception.BusinessException;

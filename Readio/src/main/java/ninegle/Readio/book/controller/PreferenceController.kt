@@ -22,16 +22,16 @@ class PreferenceController(
 ) {
     @PostMapping
     fun save(@RequestBody dto: @Valid BookIdRequestDto): ResponseEntity<BaseResponse<PreferenceResponseDto>> {
-        val userId = userContextService!!.currentUserId
+        val userId = userContextService.currentUserId
 
-        val saved = preferenceService!!.save(userId, dto)
+        val saved = preferenceService.save(userId!!, dto)
         return BaseResponse.ok("데이터가 성공적으로 저장되었습니다.", saved, HttpStatus.CREATED)
     }
 
     @DeleteMapping("/{book_id}")
     fun delete(@PathVariable("book_id") bookId: Long): ResponseEntity<BaseResponse<Void>> {
         val userId = userContextService.currentUserId
-        preferenceService.delete(userId, bookId)
+        preferenceService.delete(userId!!, bookId)
         return BaseResponse.okOnlyStatus(HttpStatus.NO_CONTENT)
     }
 
@@ -45,7 +45,7 @@ class PreferenceController(
         }
         val userId = userContextService.currentUserId
 
-        val result = preferenceService.getPreferenceList(userId, page, size)
+        val result = preferenceService.getPreferenceList(userId!!, page, size)
         return BaseResponse.ok("관심도서 조회가 성공적으로 수행되었습니다.", result, HttpStatus.OK)
     }
 }

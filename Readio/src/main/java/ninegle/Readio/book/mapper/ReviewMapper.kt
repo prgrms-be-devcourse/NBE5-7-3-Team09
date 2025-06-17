@@ -24,13 +24,13 @@ class ReviewMapper {
 
 
 // toResponseDto해결후 주석 해제
-//    fun toResponseDto(reviews: List<Review>): List<ReviewResponseDto> {
-//        val reviewResponseDtos = ArrayList<ReviewResponseDto>()
-//        for (review in reviews) {
-//            reviewResponseDtos.add(review.toResponseDto())
-//        }
-//        return reviewResponseDtos
-//    }
+    fun toResponseDto(reviews: List<Review>): List<ReviewResponseDto> {
+        val reviewResponseDtos = ArrayList<ReviewResponseDto>()
+        for (review in reviews) {
+            reviewResponseDtos.add(review.toResponseDto())
+        }
+        return reviewResponseDtos
+    }
 
     fun toPaginationDto(count: Long, page: Int, size: Int): PaginationDto {
         return PaginationDto(
@@ -56,13 +56,13 @@ class ReviewMapper {
 
 //  user.email을 못가져오는 문제 발생
 //  User 변환 후 주석해제
-//fun Review.toResponseDto() : ReviewResponseDto{
-//    return ReviewResponseDto(
-//        id = this.id!!,
-//        email = this.user.email,
-//        rating = this.rating,
-//        text = this.text,
-//        createdAt = this.createdAt!!,
-//        updatedAt = this.updatedAt!!
-//    )
-//}
+fun Review.toResponseDto() : ReviewResponseDto{
+    return ReviewResponseDto(
+        id = this.id!!,
+        email = this.user.email,
+        rating = this.rating,
+        text = this.text,
+        createdAt = this.createdAt!!,
+        updatedAt = this.updatedAt!!
+    )
+}

@@ -238,11 +238,11 @@ open class UserService(
 
         //관심도서 삭제
         val preferences = preferencesRepository.findAllByUserId(userId)
-        preferencesRepository.deleteAll(preferences)
+        preferencesRepository.deleteAll(preferences!!)
 
         //리뷰 삭제
         val reviews = reviewRepository.findAllByUserId(userId)
-        reviewRepository.deleteAll(reviews)
+        reviewRepository.deleteAll(reviews!!)
 
         //구독 삭제
         val subscriptions = subscriptionRepository.findAllByUserId(userId)

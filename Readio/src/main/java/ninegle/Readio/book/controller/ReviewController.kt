@@ -50,16 +50,16 @@ class ReviewController(
         return BaseResponse.okOnlyStatus(HttpStatus.OK)
     }
 // 매퍼 문제 해결후 주석 해제
-//    @GetMapping("/{book_id}/reviews")
-//    fun getReviews(
-//        @PathVariable("book_id") bookId: Long,
-//        @RequestParam(defaultValue = "1") page: Int,
-//        @RequestParam(defaultValue = "3") size: Int
-//    ): ResponseEntity<BaseResponse<ReviewListResponseDto>> {
-//        if (page < 1 || size < 1 || size > 50) {
-//            throw BusinessException(ErrorCode.INVALID_PAGINATION_PARAMETER)
-//        }
-//        val reviewList = reviewService.getReviewList(bookId, page, size)
-//        return BaseResponse.ok("조회가 성공적으로 수행되었습니다.", reviewList, HttpStatus.OK)
-//    }
+    @GetMapping("/{book_id}/reviews")
+    fun getReviews(
+        @PathVariable("book_id") bookId: Long,
+        @RequestParam(defaultValue = "1") page: Int,
+        @RequestParam(defaultValue = "3") size: Int
+    ): ResponseEntity<BaseResponse<ReviewListResponseDto>> {
+        if (page < 1 || size < 1 || size > 50) {
+            throw BusinessException(ErrorCode.INVALID_PAGINATION_PARAMETER)
+        }
+        val reviewList = reviewService.getReviewList(bookId, page, size)
+        return BaseResponse.ok("조회가 성공적으로 수행되었습니다.", reviewList, HttpStatus.OK)
+    }
 }

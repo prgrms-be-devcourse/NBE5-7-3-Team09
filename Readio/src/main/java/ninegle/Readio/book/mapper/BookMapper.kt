@@ -76,7 +76,7 @@ fun BookRequestDto.toEntity(publisher: Publisher, author: Author, category: Cate
         description = this.description,
         image = imageUrl,
         isbn = this.isbn,
-        ecn = this.ecn,
+        ecn = if (!this.ecn.isEmpty()) this.ecn else null,
         pubDate = this.pubDate,
         category = category,
         publisher = publisher,

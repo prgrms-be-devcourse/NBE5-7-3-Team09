@@ -32,15 +32,15 @@ class NCloudStorageService(
     private val log = KotlinLogging.logger {}
 
     @Throws(IOException::class)
-    fun uploadFile(key: String, file: MultipartFile) {
+    fun uploadFile(key: String, file: MultipartFile?) {
         val putRequest = PutObjectRequest.builder()
             .bucket(bucketName)
             .key(key)
-            .contentType(file.contentType)
+            .contentType(file!!.contentType)
             .acl(ObjectCannedACL.PUBLIC_READ)
             .build()
 
-        s3Client.putObject(putRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()))
+        s3Client.putObject(putRequest, RequestBody.fromInputStream(file.inputStream, file.size))
     }
 
     fun downloadFile(key: String): ByteArray {

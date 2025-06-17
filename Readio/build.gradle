@@ -98,6 +98,9 @@ dependencies {
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit5"
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+    // 테스트용 H2 데이터베이스 추가
+    testImplementation("com.h2database:h2")
+
     // Test Lombok (Kotlin 변환 완료 후 제거 예정)
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'

@@ -4,19 +4,31 @@ import ninegle.Readio.global.exception.BusinessException
 import ninegle.Readio.global.exception.domain.ErrorCode
 import ninegle.Readio.mypage.dto.response.PointResponseDto
 import ninegle.Readio.mypage.service.PointService
+import ninegle.Readio.user.config.JwtAuthFilter
+import ninegle.Readio.user.service.JwtTokenProvider
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.context.annotation.ComponentScan
+import org.springframework.context.annotation.FilterType
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 
-@WebMvcTest(PointController::class)
+@WebMvcTest(
+    controllers = [PointController::class],
+    excludeFilters = [
+        ComponentScan.Filter(
+            type = FilterType.ASSIGNABLE_TYPE,
+            classes = [JwtAuthFilter::class]
+        )
+    ]
+)
 class PointControllerTest {
 
     @Autowired
@@ -24,6 +36,9 @@ class PointControllerTest {
 
     @MockBean
     private lateinit var pointService: PointService
+
+    @MockBean
+    private lateinit var jwtTokenProvider: JwtTokenProvider
 
     @Test
     @DisplayName("GET /user/my/points - 포인트 조회 성공")
@@ -34,7 +49,10 @@ class PointControllerTest {
         )
         given(pointService.getUserPoints()).willReturn(pointResponseDto)
 
-        mockMvc.perform(get("/user/my/points"))
+        mockMvc.perform(
+            get("/user/my/points")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
             .andExpect(status().isOk)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.message").value("포인트 조회 성공"))
@@ -52,7 +70,10 @@ class PointControllerTest {
         )
         given(pointService.getUserPoints()).willReturn(pointResponseDto)
 
-        mockMvc.perform(get("/user/my/points"))
+        mockMvc.perform(
+            get("/user/my/points")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
             .andExpect(status().isOk)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.message").value("포인트 조회 성공"))
@@ -70,7 +91,10 @@ class PointControllerTest {
         )
         given(pointService.getUserPoints()).willReturn(pointResponseDto)
 
-        mockMvc.perform(get("/user/my/points"))
+        mockMvc.perform(
+            get("/user/my/points")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
             .andExpect(status().isOk)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.message").value("포인트 조회 성공"))
@@ -86,8 +110,12 @@ class PointControllerTest {
         given(pointService.getUserPoints())
             .willThrow(BusinessException(ErrorCode.USER_NOT_FOUND))
 
-        mockMvc.perform(get("/user/my/points"))
+        mockMvc.perform(
+            get("/user/my/points")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
             .andExpect(status().isNotFound)
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.status").value(404))
             .andExpect(jsonPath("$.code").value("USER_NOT_FOUND"))
     }
@@ -95,7 +123,10 @@ class PointControllerTest {
     @Test
     @DisplayName("인증 없이 GET 요청하면 401 반환")
     fun `인증 없이 GET 요청 시 401`() {
-        mockMvc.perform(get("/user/my/points"))
+        mockMvc.perform(
+            get("/user/my/points")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
             .andExpect(status().isUnauthorized)
     }
 }

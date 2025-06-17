@@ -24,7 +24,7 @@ import java.time.LocalDate
 
 
 // Book
-fun genBook(id: Long?, req: BookRequestDto, pub: Publisher, author: Author, category: Category, imageUrl: String) = Book(
+fun genBook(id: Long?, req: BookRequestDto, pub: Publisher, author: Author, category: Category, imageUrl: String, expired: Boolean = false) = Book(
         id = id,
         name = req.name,
         description = req.description,
@@ -34,7 +34,8 @@ fun genBook(id: Long?, req: BookRequestDto, pub: Publisher, author: Author, cate
         pubDate = req.pubDate,
         category = category,
         publisher = pub,
-        author = author
+        author = author,
+        expired = expired,
     )
 
 fun genBookRespDto(book: Book) = BookResponseDto(
@@ -76,15 +77,15 @@ fun genBookReq(
 
 
 // BookSearch
-fun genBookSearch(book: Book) = BookSearch(
-    id = book.id,
-    name = book.name,
-    image = book.image,
-    categorySub = book.category.sub,
-    categoryMajor = book.category.major,
-    author = book.author.name,
-    expired = false,
-    rating = book.rating
+fun genBookSearch(id: Long?, name: String, image: String, categorySub: String, categoryMajor: String, author: String, expired: Boolean, rating: BigDecimal) = BookSearch(
+    id = id,
+    name = name,
+    image = image,
+    categorySub = categorySub,
+    categoryMajor = categoryMajor,
+    author = author,
+    expired = expired,
+    rating = rating
 )
 
 fun genBookSearchRespDto(book: Book) = book.toSearchResponseDto()
@@ -116,7 +117,7 @@ fun genAuthorDto(id: Long, name: String) = AuthorDto(id, name)
 
 // pagination
 fun genPaginationDto(count: Long, page: Int, size: Int) = PaginationDto(
-    totalPages = (count.toInt() / size) +1,
+    totalPages = (count.toInt() / size) + 1,
     size = size,
     currentPage = page,
     totalElements = count

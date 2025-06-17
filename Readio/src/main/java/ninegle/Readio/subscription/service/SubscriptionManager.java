@@ -12,7 +12,6 @@ import ninegle.Readio.global.exception.domain.ErrorCode;
 import ninegle.Readio.mail.subscription.service.SubscriptionMailSender;
 import ninegle.Readio.subscription.domain.Subscription;
 import ninegle.Readio.subscription.repository.SubscriptionRepository;
-import ninegle.Readio.user.domain.User;
 import ninegle.Readio.user.repository.UserRepository;
 
 /**

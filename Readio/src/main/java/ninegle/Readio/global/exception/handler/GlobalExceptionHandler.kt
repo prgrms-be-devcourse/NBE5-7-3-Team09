@@ -44,7 +44,7 @@ class GlobalExceptionHandler {
             ErrorResponse(
                 status = HttpStatus.BAD_REQUEST.value(),
                 code = HttpStatus.BAD_REQUEST.name,
-                message = e.message,
+                message = e.bindingResult.allErrors.firstOrNull()?.defaultMessage ?: "validation error",
                 path = "${request.method} ${request.requestURI}"
             )
         )

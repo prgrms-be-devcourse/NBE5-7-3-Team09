@@ -85,11 +85,17 @@ class BookService(
         val imageKey = "image/${request.name}.jpg"
 
         // 2. S3에 해당 파일 존재 여부 확인
+        // epub 파일 존재 여부 확인
         if (!nCloudStorageService.fileExists(fileKey)) {
             nCloudStorageService.uploadFile(fileKey, request.epubFile)
+        } else {
+            throw BusinessException(ErrorCode.DUPLICATE_NAME)
         }
+        // 이미지 파일 존재 여부 확인
         if (!nCloudStorageService.fileExists(imageKey)) {
             nCloudStorageService.uploadFile(imageKey, request.image)
+        } else {
+            throw BusinessException(ErrorCode.DUPLICATE_NAME)
         }
 
         // 3. 연관 엔티티 조회
@@ -157,7 +163,7 @@ class BookService(
 
     @Transactional
     fun updateBook(id: Long, request: BookRequestDto): BookResponseDto {
-        val targetBook = getBookById(id)
+        val targetBook = getBookByIdAndExpired(id)
         if (targetBook.isbn != request.isbn || targetBook.ecn != request.ecn) {
             validateUpdatedBook(request, id)
         }
@@ -256,7 +262,7 @@ class BookService(
     }
 
     @Transactional(readOnly = true)
-    fun getViewerBook(id: Long): ViewerResponseDto? {
+    fun getViewerBook(id: Long): ViewerResponseDto {
         val findBook = getBookByIdAndExpired(id)
 
         val epubUri = nCloudStorageService.generateObjectUrl("epub/${findBook.name}.epub")

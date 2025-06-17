@@ -20,8 +20,7 @@ data class BookRequestDto(
 
     val description: String,
 
-    @field: NotNull(message = "이미지 파일은 필수입니다.")
-    val image: MultipartFile,
+    val image: MultipartFile?,
 
     @field: NotBlank(message = "ISBN을 입력해주세요.")
     val isbn: String,
@@ -31,8 +30,7 @@ data class BookRequestDto(
     @field: NotNull(message = "출판일자를 입력해주세요.")
     val pubDate: LocalDate,
 
-    @field: NotNull(message = "EPUB 파일은 필수입니다.")
-    val epubFile: MultipartFile
+    val epubFile: MultipartFile?
 
 ) {
 }

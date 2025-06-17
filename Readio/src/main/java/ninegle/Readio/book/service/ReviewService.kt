@@ -27,9 +27,9 @@ class ReviewService(
 ) {
 
 
-    fun getReviewById(id: Long): Review {
-        return reviewRepository.findById(id).orElseThrow { BusinessException(ErrorCode.REVIEW_NOT_FOUND) }
-    }
+    fun getReviewById(id: Long): Review
+        = reviewRepository.findById(id).orElseThrow { BusinessException(ErrorCode.REVIEW_NOT_FOUND) }
+
 
     private fun updateRatingInBookSearch(bookId: Long) {
         var rating = reviewRepository.findAverageRatingByBook(bookId)
@@ -88,11 +88,13 @@ class ReviewService(
         val count = reviewRepository.countByBook(book)
         val average = reviewRepository.findAverageRatingByBook(book.id!!)
 
-        val reviews = reviewRepository.findReviewsByBook(book, pageable)!!.content
-        val reviewList = reviewMapper.toResponseDto(reviews)
+        val reviews = reviewRepository.findReviewsByBook(book, pageable)?: throw BusinessException(ErrorCode.REVIEW_NOT_FOUND)
+        val validReviews = reviews.content
+
+        val reviewList = reviewMapper.toResponseDto(validReviews)
 
         val paginationDto = reviewMapper.toPaginationDto(count, page, size)
-        val summaryDto = reviewMapper.toSummaryDto(count, average!!)
+        val summaryDto = reviewMapper.toSummaryDto(count, average ?: BigDecimal(0.0))
 
         return reviewMapper.toReviewListResponseDto(
             reviewList, paginationDto,

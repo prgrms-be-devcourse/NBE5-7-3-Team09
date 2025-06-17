@@ -67,12 +67,11 @@ class PreferenceService(
         val pageable: Pageable = PageRequest.of(page - 1, size)
         val count = preferencesRepository.countByUser(user)
 
-        val preferences = preferencesRepository.findPreferencesByUser(
-            user,
-            pageable
-        )!!
-            .content
-        val preferenceList = preferenceMapper.toPreferenceDto(preferences)
+        val preferences = preferencesRepository.findPreferencesByUser(user,pageable
+        ) ?: throw BusinessException(ErrorCode.PREFERENCE_NOT_FOUND)
+
+        val validPreferences = preferences.content
+        val preferenceList = preferenceMapper.toPreferenceDto(validPreferences)
 
         val paginationDto = preferenceMapper.toPaginationDto(count, page, size)
 

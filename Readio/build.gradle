@@ -101,6 +101,8 @@ dependencies {
     // Test Lombok (Kotlin 변환 완료 후 제거 예정)
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
+
+
 }
 
 tasks.named('test') {

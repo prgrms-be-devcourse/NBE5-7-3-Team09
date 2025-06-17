@@ -9,13 +9,6 @@ import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-/**
- * Readio - Book
- * create date:    25. 5. 8.
- * last update:    25. 5. 8.
- * author:  gigol
- * purpose:
- */
 @Entity
 @SQLDelete(sql = "UPDATE book SET expired = true, expired_at= CURRENT_TIMESTAMP WHERE id = ?")
 class Book(

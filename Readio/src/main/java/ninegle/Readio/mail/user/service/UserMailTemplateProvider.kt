@@ -1,18 +1,17 @@
-package ninegle.Readio.mail.user.service;
+package ninegle.Readio.mail.user.service
 
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
-import ninegle.Readio.global.util.StringUtil;
+import org.springframework.stereotype.Service
+import org.springframework.util.StringUtils
+import ninegle.Readio.global.util.StringUtil
 
 @Service
-public class UserMailTemplateProvider {
+class UserMailTemplateProvider {
 
-	public String buildSignupMailBody(String nickname) {
-		// 닉네임이 null 또는 공백일 경우 "회원"으로 대체
-		String reNickname = StringUtils.hasText(nickname) ? nickname : "회원";
+    fun buildSignupMailBody(nickname: String): String {
+        // 닉네임이 null 또는 공백일 경우 "회원"으로 대체
+        val reNickname = if (StringUtils.hasText(nickname)) nickname else "회원"
 
-		return StringUtil.format("""
+        return StringUtil.format("""
                 안녕하세요, {}님!
                 
                 ✨ Readio 회원가입을 진심으로 환영합니다! ✨
@@ -44,6 +43,6 @@ public class UserMailTemplateProvider {
                 주식회사 Readio | 프로그래머스 2차 프로젝트 리디오 
                 전화번호: 02-123-456 | 전자책서비스를 여러분에게 제공합니다.
                 Copyright © 2025 by Readio, Inc. All rights reserved.
-                """, reNickname);
-	}
+                """, reNickname)
+    }
 }

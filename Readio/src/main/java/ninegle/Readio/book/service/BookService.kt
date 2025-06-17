@@ -26,6 +26,7 @@ import ninegle.Readio.publisher.repository.PublisherRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
@@ -67,7 +68,7 @@ class BookService(
 
     private fun getBookSearchList(keyword: String, page: Int, size: Int): MutableList<BookSearch> {
         val result: MutableSet<BookSearch> = LinkedHashSet()
-        val pageable: Pageable = PageRequest.of(page - 1, size)
+        val pageable: Pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.ASC, "id"))
 
         result.addAll(bookSearchRepository.findByExpiredFalseAndAuthorContaining(keyword, pageable).getContent())
         result.addAll(bookSearchRepository.findByExpiredFalseAndNameContaining(keyword, pageable).getContent())
@@ -245,7 +246,7 @@ class BookService(
 
     @Transactional(readOnly = true)
     fun getBookByCategory(categoryMajor: String, page: Int, size: Int): BookListResponseDto {
-        val pageable: Pageable = PageRequest.of(page - 1, size)
+        val pageable: Pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.ASC, "id"))
         val findBooks: Page<BookSearch> = if (categoryMajor == "null")
             bookSearchRepository.findByExpiredFalse(pageable)
         else

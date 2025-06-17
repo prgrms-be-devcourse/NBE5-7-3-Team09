@@ -32,7 +32,7 @@ class PreferenceService(
 ) {
 
     fun getPreferenceByBookAndUser(book: Book, user: User): Preference {
-        return preferencesRepository!!.findPreferenceByBookAndUser(book, user)
+        return preferencesRepository.findPreferenceByBookAndUser(book, user)
             ?: throw BusinessException(ErrorCode.PREFERENCE_NOT_FOUND)
 
     }
@@ -53,7 +53,7 @@ class PreferenceService(
     }
 
     @Transactional
-    fun delete(userId: Long, bookId: Long): ResponseEntity<BaseResponse<Void?>> {
+    fun delete(userId: Long, bookId: Long): ResponseEntity<BaseResponse<Void>> {
         val book = bookService.getBookById(bookId)
         val user = userService.getById(userId)
         val preference = getPreferenceByBookAndUser(book, user)

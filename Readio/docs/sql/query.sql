@@ -157,6 +157,7 @@ VALUES
     (false, 10,1, 320, 'image/사회계약론.jpg',       '2025-05-12', '2025-05-12',
      '9788998139103',NULL, '사회계약론', '사회계약론',0);
 
+
 select *
 from review;
 insert into review values (4.5,1,now(),1,now(),1,'goodbook')

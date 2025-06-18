@@ -85,6 +85,9 @@ enum class ErrorCode(val status: HttpStatus, val message: String) {
 	 */
     //400
     RATING_OUT_OF_BOUNDARY(HttpStatus.BAD_REQUEST, "평점의 범위는 1.0부터 5.0입니다."),
+    //400
+    REVIEW_ALREADY_EXISTS(HttpStatus.BAD_REQUEST,"리뷰가 이미 존재합니다."),
+
 
     /*
 	 * mypage : 관련 예외 처리

@@ -1,6 +1,5 @@
 package ninegle.Readio.book.dto.reviewdto
 
-import lombok.Builder
 import ninegle.Readio.book.dto.PaginationDto
 
 

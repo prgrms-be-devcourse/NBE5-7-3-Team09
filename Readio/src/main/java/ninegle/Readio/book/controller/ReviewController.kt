@@ -49,7 +49,6 @@ class ReviewController(
         reviewService.update(review, reviewId)
         return BaseResponse.okOnlyStatus(HttpStatus.OK)
     }
-// 매퍼 문제 해결후 주석 해제
     @GetMapping("/{book_id}/reviews")
     fun getReviews(
         @PathVariable("book_id") bookId: Long,

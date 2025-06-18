@@ -51,14 +51,17 @@ class ReviewService(
 
     // Review Create
     @Transactional
-    fun save(userId: Long?, reviewRequestDto: ReviewRequestDto, book_id: Long) {
+    fun save(userId: Long?, reviewRequestDto: ReviewRequestDto, bookId: Long) {
         val user = userService.getById(userId!!)
-        val book = bookService.getBookById(book_id)
+        val book = bookService.getBookById(bookId)
+        if(reviewRepository.existsByUserAndBook(user,book)){
+            throw BusinessException(ErrorCode.REVIEW_ALREADY_EXISTS)
+        }
         reviewRepository.save(reviewMapper.toEntity(reviewRequestDto, user, book))
 
         reviewRepository.flush()
 
-        updateRatingInBookSearch(book_id)
+        updateRatingInBookSearch(bookId)
     }
 
     // Review Delete
@@ -69,6 +72,7 @@ class ReviewService(
         reviewRepository.delete(review)
         reviewRepository.flush()
 
+
         updateRatingInBookSearch(review.book.id!!)
     }
 
@@ -76,7 +80,7 @@ class ReviewService(
     @Transactional
     fun update(reviewRequestDto: ReviewRequestDto, reviewId: Long) {
         val review = getReviewById(reviewId)
-        reviewRepository.save(review.update(reviewRequestDto))
+        review.update(reviewRequestDto)
         reviewRepository.flush()
 
         updateRatingInBookSearch(review.book.id!!)

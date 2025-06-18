@@ -13,7 +13,6 @@ import ninegle.Readio.book.repository.BookSearchRepository
 import ninegle.Readio.book.repository.ReviewRepository
 import ninegle.Readio.book.util.*
 import ninegle.Readio.global.exception.BusinessException
-import ninegle.Readio.global.exception.domain.ErrorCode
 import ninegle.Readio.global.util.genCategory
 import ninegle.Readio.global.util.genPublisher
 import ninegle.Readio.user.domain.User
@@ -23,13 +22,12 @@ import ninegle.Readio.user.util.UserUtil
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.*
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.springframework.mock.web.MockMultipartFile
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.util.*
 
-class ReviewServiceSaveTests {
+class ReviewServiceTests {
 
     val bookRepository = mockk<BookRepository>()
     val bookService = mockk<BookService>()
@@ -140,4 +138,57 @@ class ReviewServiceSaveTests {
         verify(exactly = 1) { reviewRepository.existsByUserAndBook(user,book) }
     }
 
+    @Test
+    fun `리뷰 삭제`(){
+        val review = mockk<Review>()
+
+        every { reviewRepository.findById(1L) } returns Optional.of(review)
+        every { reviewRepository.delete(review) } returns Unit
+        every { reviewRepository.flush() } returns Unit
+        every { bookService.getBookById(1L) } returns book
+        every { bookRepository.findById(1L) } returns Optional.of(book)
+        every { bookSearchRepository.findById(1L) } returns Optional.of(bookSearch)
+        every { bookSearchRepository.save(bookSearch) } returns bookSearch
+        every { reviewRepository.flush() } returns Unit
+        every { reviewRepository.findAverageRatingByBook(book.id!!)} returns book.rating
+        every { review.book } returns book
+
+        service.delete(1L)
+
+        verify { reviewRepository.delete(review) }
+
+
+    }
+    @Test
+    fun `리뷰가 존재하지 않을 시 삭제 취소`(){
+        val review = mockk<Review>()
+
+        every { reviewRepository.findById(1L) } returns Optional.empty()
+
+        assertThrows<BusinessException> {
+            service.delete(1L)
+        }
+    }
+    @Test
+    fun `리뷰 성공 업데이트`(){
+        val review = mockk<Review>()
+        val reviewRequestDto = ReviewRequestDto(BigDecimal(4.0), "goodBook")
+        every { userService.getUser(1L) } returns user
+        every { userService.getById(1L) } returns user
+        every { bookService.getBookById(1L) } returns book
+        every { bookRepository.findById(1L) } returns Optional.of(book)
+        every { bookSearchRepository.findById(1L) } returns Optional.of(bookSearch)
+        every { bookSearchRepository.save(bookSearch) } returns bookSearch
+        every { reviewRepository.flush() } returns Unit
+        every { reviewRepository.findAverageRatingByBook(book.id!!)} returns book.rating
+        every { reviewMapper.toEntity(eq(reviewRequestDto), eq(user), eq(book)) } returns review
+        every { reviewRepository.existsByUserAndBook(user, book) } returns false
+        every { reviewRepository.findById(1L) } returns Optional.of(review)
+        every { review.update(reviewRequestDto) } returns review
+        every { review.book } returns book
+
+
+        service.update(reviewRequestDto,1L)
+
+    }
 }

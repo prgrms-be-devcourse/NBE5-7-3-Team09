@@ -10,6 +10,9 @@ import ninegle.Readio.category.dto.CategoryDto
 import ninegle.Readio.global.exception.BusinessException
 import ninegle.Readio.global.exception.domain.ErrorCode
 import ninegle.Readio.publisher.dto.PublisherDto
+import ninegle.Readio.user.repository.BlackListRepository
+import ninegle.Readio.user.repository.UserRepository
+import ninegle.Readio.user.service.JwtTokenProvider
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.*
 import org.springframework.beans.factory.annotation.Autowired
@@ -40,6 +43,15 @@ class AdminBookControllerTests {
 
     @MockBean
     lateinit var service: BookService
+
+    @MockBean
+    lateinit var jwtTokenProvider: JwtTokenProvider
+
+    @MockBean
+    lateinit var userRepository: UserRepository
+
+    @MockBean
+    lateinit var blackListRepository: BlackListRepository
 
     @Autowired
     lateinit var om: ObjectMapper

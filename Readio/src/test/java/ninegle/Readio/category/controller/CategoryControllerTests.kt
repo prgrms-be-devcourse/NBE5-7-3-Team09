@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import ninegle.Readio.category.dto.CategoryGroupResponseDto
 import ninegle.Readio.category.service.CategoryService
 import ninegle.Readio.global.util.genCategoriesRespDto
+import ninegle.Readio.user.repository.BlackListRepository
+import ninegle.Readio.user.repository.UserRepository
+import ninegle.Readio.user.service.JwtTokenProvider
 import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -21,6 +24,15 @@ class CategoryControllerTests {
 
     @MockBean
     lateinit var service: CategoryService
+
+    @MockBean
+    lateinit var jwtTokenProvider: JwtTokenProvider
+
+    @MockBean
+    lateinit var userRepository: UserRepository
+
+    @MockBean
+    lateinit var blackListRepository: BlackListRepository
 
     @Autowired
     lateinit var om: ObjectMapper

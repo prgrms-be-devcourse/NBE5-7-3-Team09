@@ -29,6 +29,7 @@ import org.junit.jupiter.api.assertThrows
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.http.HttpStatus
 import org.springframework.mock.web.MockMultipartFile
 import java.math.BigDecimal
@@ -205,7 +206,7 @@ class BookServiceReadTests {
     fun `도서 전체 조회 성공시 BookListResponseDto를 반환한다`() {
         val page = 1
         val size = 10
-        val pageable = PageRequest.of(page-1,size)
+        val pageable = PageRequest.of(page-1,size, Sort.by(Sort.Direction.ASC, "id"))
 
         val books = mutableListOf(
                 genBookSearch(id = 1L,
@@ -266,7 +267,7 @@ class BookServiceReadTests {
     fun `도서 카테고리별 조회 성공시 BookListResponseDto를 반환한다`() {
         val page = 1
         val size = 10
-        val pageable = PageRequest.of(page-1,size)
+        val pageable = PageRequest.of(page-1,size, Sort.by(Sort.Direction.ASC, "id"))
 
         val categoryMajor = "총류"
 
@@ -330,7 +331,7 @@ class BookServiceReadTests {
     fun `도서 전체 조회시 데이터가 존재하지 않을 경우 빈 리스트를 반환한다`() {
         val page = 1
         val size = 10
-        val pageable = PageRequest.of(page-1,size)
+        val pageable = PageRequest.of(page-1,size, Sort.by(Sort.Direction.ASC, "id"))
 
         val books: MutableList<BookSearch> = mutableListOf()
 
@@ -353,7 +354,7 @@ class BookServiceReadTests {
     fun `도서 카테고리별 조회시 데이터가 존재하지 않을 경우 빈 리스트를 반환한다`() {
         val page = 1
         val size = 10
-        val pageable = PageRequest.of(page-1,size)
+        val pageable = PageRequest.of(page-1,size, Sort.by(Sort.Direction.ASC, "id"))
 
         val categoryMajor = "총류"
 
@@ -380,7 +381,7 @@ class BookServiceReadTests {
         val keyword = "코틀린"
         val page = 1
         val size = 10
-        val pageable = PageRequest.of(page - 1,size)
+        val pageable = PageRequest.of(page-1,size, Sort.by(Sort.Direction.ASC, "id"))
 
         val book1 = genBookSearch(id = 1L,
             name = "코틀린 인 액션",
@@ -441,7 +442,7 @@ class BookServiceReadTests {
         val keyword = "코틀린"
         val page = 1
         val size = 10
-        val pageable = PageRequest.of(page - 1,size)
+        val pageable = PageRequest.of(page-1,size, Sort.by(Sort.Direction.ASC, "id"))
 
         val namePage: Page<BookSearch> = PageImpl(listOf())
         val authorPage: Page<BookSearch> = PageImpl(listOf())

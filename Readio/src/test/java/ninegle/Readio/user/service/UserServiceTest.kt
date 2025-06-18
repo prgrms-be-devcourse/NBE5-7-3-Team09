@@ -26,11 +26,14 @@ import ninegle.Readio.user.domain.RefreshToken
 import ninegle.Readio.user.dto.RefreshTokenRequestDto
 import ninegle.Readio.user.dto.TokenBody
 import ninegle.Readio.user.util.UserUtil
+import org.junit.jupiter.api.Assertions.assertNotEquals
+import org.junit.jupiter.api.BeforeEach
 import org.springframework.boot.autoconfigure.security.SecurityProperties
 import java.util.*
 
 
 class UserServiceTest {
+    private lateinit var user: User
     private val userRepository = mockk<UserRepository>()
     private val tokenRepository = mockk<TokenRepository>()
     private val jwtTokenProvider = mockk<JwtTokenProvider>()
@@ -47,6 +50,13 @@ class UserServiceTest {
         userRepository, passwordEncoder, jwtTokenProvider, tokenRepository, blackListRepository, userMailSender,
         reviewRepository, preferencesRepository, subscriptionRepository, libraryRepository, libraryBookRepository)
 
+
+
+    @BeforeEach
+    fun setUp() {
+        user = UserUtil.createTestUser();
+    }
+
     @Test
     fun `회원가입 성공 테스트`() {
         val dto = SignUpRequestDto("test@example.com", "1234", "test", "010-1111-1111")
@@ -55,7 +65,6 @@ class UserServiceTest {
         every { passwordEncoder.encode(dto.password) } returns "encoded"
         val slot = slot<User>()  // User 객체를 담을 슬롯 준비
 
-        val user = UserUtil.createTestUser()
         every { userRepository.save(capture(slot)) } returns user
         every { userMailSender.sendSignupMail(any()) } just runs
 
@@ -75,7 +84,6 @@ class UserServiceTest {
     @Test
     fun `회원가입 실패 테스트 (이메일 중복)` (){
         val dto = SignUpRequestDto("test@example.com", "1234", "test", "010-1111-1111")
-        val user = UserUtil.createTestUser()
         every { userRepository.findByEmail(dto.email) } returns user
 
         val exception = assertThrows<BusinessException> {
@@ -90,7 +98,6 @@ class UserServiceTest {
     @Test
     fun `로그인 성공 테스트 (access Token과 refresh Token도 발급 되는지)`(){
         val dto = LoginRequestDto("test@example.com", "1234")
-        val user = UserUtil.createTestUser()
 
         every { userRepository.findByEmail(dto.email) } returns user
         every { passwordEncoder.matches(dto.password, user.password) } returns true
@@ -115,7 +122,6 @@ class UserServiceTest {
     @Test
     fun `로그인 실패 테스트 (정보가 없는 사용자 입력)`(){
         val dto = LoginRequestDto("test@example.com", "1234")
-        val user = UserUtil.createTestUser()
 
         every { userRepository.findByEmail(dto.email) } returns null
         every { passwordEncoder.matches(dto.password, user.password) } returns true
@@ -151,7 +157,6 @@ class UserServiceTest {
         val oldRefreshToken = "old-refresh-token"
         val newRefreshToken = "new-refresh-token"
         val newAccessToken = "new-access-token"
-        val user = UserUtil.createTestUser()
 
         every { jwtTokenProvider.validate(oldRefreshToken) } returns true
         every { jwtTokenProvider.parseJwt(oldRefreshToken) } returns TokenBody(user.id,user.email,user.role)
@@ -184,7 +189,6 @@ class UserServiceTest {
 
         val accessToken = "access-token"
         val refreshToken = refreshTokenRequestDto.refreshToken
-        val user = UserUtil.createTestUser()
 
         every { jwtTokenProvider.validate(accessToken) } returns true
         every { jwtTokenProvider.parseJwt(accessToken) } returns TokenBody(user.id,user.email,user.role)
@@ -204,7 +208,7 @@ class UserServiceTest {
 
         userService.logout(accessToken,refreshTokenRequestDto)
 
-        verify (exactly = 1) { jwtTokenProvider.validate(accessToken) }
+        verify(exactly = 1) { jwtTokenProvider.validate(accessToken) }
         verify(exactly = 1) { jwtTokenProvider.parseJwt(accessToken) }
         verify(exactly = 1) { tokenRepository.findTop1ByUserIdOrderByIdDesc(user.id) }
         verify(exactly = 1) { jwtTokenProvider.getExpiration(accessToken) }
@@ -214,6 +218,50 @@ class UserServiceTest {
         println("로그아웃 성공 테스트 완료")
 
     }
+
+    @Test
+    fun `로그아웃 실패 테스트 (accessToken 유효하지 않음)`() {
+        val dto = RefreshTokenRequestDto("refresh-token")
+        val accessToken = "invalid-access-token"
+
+        every { jwtTokenProvider.validate(accessToken) } returns false
+
+        val exception = assertThrows<BusinessException> {
+            userService.logout(accessToken, dto)
+        }
+
+        assertEquals("유효하지 않은 Access Token입니다.", exception.message)
+        println("로그아웃 실패 테스트 성공(유효하지 않은 Access Token)")
+    }
+
+    @Test
+    fun `로그아웃 실패 테스트 (refreshToken이 유효하지 않음)`() {
+        val dto = RefreshTokenRequestDto("refresh-token")
+        val accessToken = "invalid-access-token"
+        val refreshToken = dto.refreshToken
+
+        every { jwtTokenProvider.validate(accessToken) } returns true
+        every { jwtTokenProvider.parseJwt(accessToken) } returns TokenBody(user.id,user.email,user.role)
+        every { userRepository.findById(user.id!!) } returns Optional.of(user)
+
+        val savedRefreshToken = RefreshToken("실제 DB에 refreshToken", user)
+        every { tokenRepository.findTop1ByUserIdOrderByIdDesc(user.id) } returns savedRefreshToken
+
+        // DB에서 조회한 refreshToken 값과 로그아웃 요청 시 사용한 refreshToken이 다름
+        assertNotEquals (savedRefreshToken.refreshToken, (refreshToken))
+
+
+        val exception = assertThrows<BusinessException> {
+            userService.logout(accessToken, dto)
+        }
+
+        assertEquals("유효하지 않은 Refresh Token입니다.", exception.message)
+        println("로그아웃 실패 테스트 성공 (유효하지 않은 Refresh Token)")
+    }
+
+
+
+
 
 
 

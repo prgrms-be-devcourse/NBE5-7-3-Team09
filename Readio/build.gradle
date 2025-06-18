@@ -101,6 +101,8 @@ dependencies {
     // 테스트용 H2 데이터베이스 추가
     testImplementation("com.h2database:h2")
 
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0") // 버전은 최신으로
+
     // Test Lombok (Kotlin 변환 완료 후 제거 예정)
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'

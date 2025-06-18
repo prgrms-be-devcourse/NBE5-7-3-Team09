@@ -11,7 +11,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 import java.time.LocalDate
 
 @DataJpaTest //db에 연결
-class SubscriptionRepositoryTest {
+class
+SubscriptionRepositoryTest {
 
     @Autowired
     private lateinit var subscriptionRepository: SubscriptionRepository

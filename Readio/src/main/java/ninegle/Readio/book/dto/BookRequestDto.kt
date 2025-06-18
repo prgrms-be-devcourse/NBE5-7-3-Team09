@@ -2,6 +2,8 @@ package ninegle.Readio.book.dto
 
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
+import ninegle.Readio.global.validation.EpubFile
+import ninegle.Readio.global.validation.ImageFile
 import org.springframework.web.multipart.MultipartFile
 import java.time.LocalDate
 
@@ -19,7 +21,7 @@ data class BookRequestDto(
     val name: String,
 
     val description: String,
-
+    @field: ImageFile
     val image: MultipartFile?,
 
     @field: NotBlank(message = "ISBN을 입력해주세요.")
@@ -30,6 +32,7 @@ data class BookRequestDto(
     @field: NotNull(message = "출판일자를 입력해주세요.")
     val pubDate: LocalDate,
 
+    @field: EpubFile
     val epubFile: MultipartFile?
 
 )

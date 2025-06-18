@@ -26,6 +26,7 @@ import ninegle.Readio.user.domain.RefreshToken
 import ninegle.Readio.user.dto.RefreshTokenRequestDto
 import ninegle.Readio.user.dto.TokenBody
 import ninegle.Readio.user.util.UserUtil
+import org.junit.jupiter.api.BeforeEach
 import org.springframework.boot.autoconfigure.security.SecurityProperties
 import java.util.*
 
@@ -47,6 +48,13 @@ class UserServiceTest {
         userRepository, passwordEncoder, jwtTokenProvider, tokenRepository, blackListRepository, userMailSender,
         reviewRepository, preferencesRepository, subscriptionRepository, libraryRepository, libraryBookRepository)
 
+    private lateinit var user: User
+
+    @BeforeEach
+    fun setUp() {
+        user = UserUtil.createTestUser()
+    }
+
     @Test
     fun `회원가입 성공 테스트`() {
         val dto = SignUpRequestDto("test@example.com", "1234", "test", "010-1111-1111")
@@ -55,7 +63,6 @@ class UserServiceTest {
         every { passwordEncoder.encode(dto.password) } returns "encoded"
         val slot = slot<User>()  // User 객체를 담을 슬롯 준비
 
-        val user = UserUtil.createTestUser()
         every { userRepository.save(capture(slot)) } returns user
         every { userMailSender.sendSignupMail(any()) } just runs
 
@@ -75,7 +82,7 @@ class UserServiceTest {
     @Test
     fun `회원가입 실패 테스트 (이메일 중복)` (){
         val dto = SignUpRequestDto("test@example.com", "1234", "test", "010-1111-1111")
-        val user = UserUtil.createTestUser()
+
         every { userRepository.findByEmail(dto.email) } returns user
 
         val exception = assertThrows<BusinessException> {
@@ -90,7 +97,6 @@ class UserServiceTest {
     @Test
     fun `로그인 성공 테스트 (access Token과 refresh Token도 발급 되는지)`(){
         val dto = LoginRequestDto("test@example.com", "1234")
-        val user = UserUtil.createTestUser()
 
         every { userRepository.findByEmail(dto.email) } returns user
         every { passwordEncoder.matches(dto.password, user.password) } returns true
@@ -115,7 +121,6 @@ class UserServiceTest {
     @Test
     fun `로그인 실패 테스트 (정보가 없는 사용자 입력)`(){
         val dto = LoginRequestDto("test@example.com", "1234")
-        val user = UserUtil.createTestUser()
 
         every { userRepository.findByEmail(dto.email) } returns null
         every { passwordEncoder.matches(dto.password, user.password) } returns true
@@ -151,7 +156,6 @@ class UserServiceTest {
         val oldRefreshToken = "old-refresh-token"
         val newRefreshToken = "new-refresh-token"
         val newAccessToken = "new-access-token"
-        val user = UserUtil.createTestUser()
 
         every { jwtTokenProvider.validate(oldRefreshToken) } returns true
         every { jwtTokenProvider.parseJwt(oldRefreshToken) } returns TokenBody(user.id,user.email,user.role)
@@ -184,7 +188,6 @@ class UserServiceTest {
 
         val accessToken = "access-token"
         val refreshToken = refreshTokenRequestDto.refreshToken
-        val user = UserUtil.createTestUser()
 
         every { jwtTokenProvider.validate(accessToken) } returns true
         every { jwtTokenProvider.parseJwt(accessToken) } returns TokenBody(user.id,user.email,user.role)
@@ -204,7 +207,7 @@ class UserServiceTest {
 
         userService.logout(accessToken,refreshTokenRequestDto)
 
-        verify (exactly = 1) { jwtTokenProvider.validate(accessToken) }
+        verify(exactly = 1) { jwtTokenProvider.validate(accessToken) }
         verify(exactly = 1) { jwtTokenProvider.parseJwt(accessToken) }
         verify(exactly = 1) { tokenRepository.findTop1ByUserIdOrderByIdDesc(user.id) }
         verify(exactly = 1) { jwtTokenProvider.getExpiration(accessToken) }

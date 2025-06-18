@@ -1,4 +1,4 @@
-// package ninegle.Readio.library.domain;
+package ninegle.Readio.library.domain;// package ninegle.Readio.library.domain;
 //
 // import java.time.LocalDateTime;
 //

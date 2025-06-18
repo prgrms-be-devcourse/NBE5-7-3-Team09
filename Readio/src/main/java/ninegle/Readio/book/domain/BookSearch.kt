@@ -20,7 +20,7 @@ import java.util.*
 @Document(indexName = "books")
 class BookSearch(
     @Id
-    @Field(type = FieldType.Keyword)
+    @Field(type = FieldType.Long)
     val id: Long? = null,
 
     @Field(type = FieldType.Text, analyzer = "nori", searchAnalyzer = "nori")

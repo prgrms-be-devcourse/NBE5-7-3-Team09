@@ -2,6 +2,7 @@ package ninegle.Readio.book.mapper
 
 
 import ninegle.Readio.adapter.config.NCloudStorageConfig
+import ninegle.Readio.adapter.util.NCloudStorageUtils
 import ninegle.Readio.book.domain.Book
 import ninegle.Readio.book.domain.BookSearch
 import ninegle.Readio.book.dto.booksearch.BookSearchResponseDto
@@ -18,7 +19,7 @@ class BookSearchMapper(
         return BookSearchResponseDto(
             id = this.id,
             name = this.name,
-            image = nCloudStorageConfig.toImageUrl(this.image),
+            image = NCloudStorageUtils.toImageUrl(this.image),
             categoryMajor = this.categoryMajor,
             categorySub = this.categorySub,
             authorName = this.author,

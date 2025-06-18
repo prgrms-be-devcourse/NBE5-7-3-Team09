@@ -2,6 +2,7 @@ package ninegle.Readio.book.mapper
 
 
 import ninegle.Readio.adapter.config.NCloudStorageConfig
+import ninegle.Readio.adapter.util.NCloudStorageUtils
 import ninegle.Readio.book.domain.Author
 import ninegle.Readio.book.domain.Book
 import ninegle.Readio.book.dto.BookRequestDto
@@ -17,16 +18,14 @@ import ninegle.Readio.publisher.dto.PublisherDto
 import org.springframework.stereotype.Component
 
 @Component
-class BookMapper(
-    private val nCloudStorageConfig: NCloudStorageConfig
-) {
+class BookMapper {
 
     fun toDto(book: Book): BookResponseDto {
         return BookResponseDto(
             id = book.id!!,
             name = book.name,
             description = book.description,
-            image = nCloudStorageConfig.toImageUrl(book.image),
+            image = NCloudStorageUtils.toImageUrl(book.image),
             isbn = book.isbn,
             ecn = book.ecn,
             pubDate = book.pubDate,
@@ -77,7 +76,7 @@ fun BookRequestDto.toEntity(publisher: Publisher, author: Author, category: Cate
         description = this.description,
         image = imageUrl,
         isbn = this.isbn,
-        ecn = this.ecn,
+        ecn = if (!this.ecn.isEmpty()) this.ecn else null,
         pubDate = this.pubDate,
         category = category,
         publisher = publisher,

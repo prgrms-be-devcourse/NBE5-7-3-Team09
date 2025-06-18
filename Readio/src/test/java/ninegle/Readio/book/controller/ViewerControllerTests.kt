@@ -5,6 +5,9 @@ import ninegle.Readio.book.dto.viewer.ViewerResponseDto
 import ninegle.Readio.book.service.BookService
 import ninegle.Readio.global.exception.BusinessException
 import ninegle.Readio.global.exception.domain.ErrorCode
+import ninegle.Readio.user.repository.BlackListRepository
+import ninegle.Readio.user.repository.UserRepository
+import ninegle.Readio.user.service.JwtTokenProvider
 import org.junit.jupiter.api.Assertions.*
 import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
@@ -27,6 +30,15 @@ class ViewerControllerTests {
 
     @MockBean
     lateinit var service: BookService
+
+    @MockBean
+    lateinit var jwtTokenProvider: JwtTokenProvider
+
+    @MockBean
+    lateinit var userRepository: UserRepository
+
+    @MockBean
+    lateinit var blackListRepository: BlackListRepository
 
     @Test
     @WithMockUser(roles = ["USER"])

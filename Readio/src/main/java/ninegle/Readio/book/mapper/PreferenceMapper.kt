@@ -1,6 +1,6 @@
 package ninegle.Readio.book.mapper
 
-import ninegle.Readio.adapter.config.NCloudStorageConfig
+import ninegle.Readio.adapter.util.NCloudStorageUtils
 import ninegle.Readio.book.domain.Book
 import ninegle.Readio.book.domain.Preference
 import ninegle.Readio.book.dto.PaginationDto
@@ -9,10 +9,8 @@ import ninegle.Readio.book.dto.preferencedto.PreferenceResponseDto
 import ninegle.Readio.user.domain.User
 import org.springframework.stereotype.Component
 
-
 @Component
-class PreferenceMapper(
-    val nCloudStorageConfig: NCloudStorageConfig) {
+class PreferenceMapper {
 
     fun toEntity(user: User, book: Book): Preference {
         return Preference(
@@ -25,7 +23,7 @@ class PreferenceMapper(
         return PreferenceResponseDto(
             id = preference.book.id!!,
             name = preference.book.name,
-            image = nCloudStorageConfig.toImageUrl(preference.book.image),
+            image = NCloudStorageUtils.toImageUrl(preference.book.image),
             rating = preference.book.rating
         )
     }

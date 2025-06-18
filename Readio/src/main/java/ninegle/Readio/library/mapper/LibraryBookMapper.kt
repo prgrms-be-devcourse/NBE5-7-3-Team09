@@ -1,6 +1,6 @@
 package ninegle.Readio.library.mapper
 
-import ninegle.Readio.adapter.config.NCloudStorageConfig
+import ninegle.Readio.adapter.util.NCloudStorageUtils
 import ninegle.Readio.book.domain.Book
 import ninegle.Readio.library.domain.Library
 import ninegle.Readio.library.dto.book.AllLibraryBooksDto
@@ -12,11 +12,8 @@ import org.springframework.stereotype.Component
 
 
 @Component
-
-class LibraryBookMapper (
-    private val nCloudStorageConfig: NCloudStorageConfig? = null)
+class LibraryBookMapper
 {
-
     //라이브러리에 책 추가
     fun toNewLibraryBook(libraryBookRequestDto: NewLibraryBookRequestDto): Long {
         return libraryBookRequestDto.bookId
@@ -28,7 +25,7 @@ class LibraryBookMapper (
                 AllLibraryBooksDto(
                     bookId = book.id,
                     bookName = book.name,
-                    bookImage = nCloudStorageConfig!!.toImageUrl(book.image),
+                    bookImage = NCloudStorageUtils.toImageUrl(book.image),
                     bookIsbn = book.isbn,
                     bookEcn = book.ecn,
                     bookPubDate = book.pubDate,

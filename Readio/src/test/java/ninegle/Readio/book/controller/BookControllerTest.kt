@@ -14,6 +14,9 @@ import ninegle.Readio.global.exception.BusinessException
 import ninegle.Readio.global.exception.domain.ErrorCode
 import ninegle.Readio.global.util.genCategory
 import ninegle.Readio.global.util.genPublisher
+import ninegle.Readio.user.repository.BlackListRepository
+import ninegle.Readio.user.repository.UserRepository
+import ninegle.Readio.user.service.JwtTokenProvider
 import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -36,6 +39,15 @@ class BookControllerTest {
 
     @MockBean
     lateinit var service: BookService
+
+    @MockBean
+    lateinit var jwtTokenProvider: JwtTokenProvider
+
+    @MockBean
+    lateinit var userRepository: UserRepository
+
+    @MockBean
+    lateinit var blackListRepository: BlackListRepository
 
     @Test
     fun `도서 상세 조회 요청시 성공적으로 수행되었을 때 조회된 데이터와 200 Ok응답을 반환한다`() {

@@ -63,7 +63,7 @@ class Book(
         this.description = dto.description
         this.image = imageUrl
         this.isbn = dto.isbn
-        this.ecn = dto.ecn
+        this.ecn = dto.ecn.ifEmpty { null }
         this.pubDate = dto.pubDate
         this.updatedAt = LocalDate.now()
         this.category = category

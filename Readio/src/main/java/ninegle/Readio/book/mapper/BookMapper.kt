@@ -16,6 +16,7 @@ import ninegle.Readio.category.dto.CategoryDto
 import ninegle.Readio.publisher.domain.Publisher
 import ninegle.Readio.publisher.dto.PublisherDto
 import org.springframework.stereotype.Component
+import kotlin.text.ifEmpty
 
 @Component
 class BookMapper {
@@ -76,7 +77,7 @@ fun BookRequestDto.toEntity(publisher: Publisher, author: Author, category: Cate
         description = this.description,
         image = imageUrl,
         isbn = this.isbn,
-        ecn = if (!this.ecn.isEmpty()) this.ecn else null,
+        ecn = this.ecn.ifEmpty { null },
         pubDate = this.pubDate,
         category = category,
         publisher = publisher,
